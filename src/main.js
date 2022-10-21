@@ -22,6 +22,10 @@ const securityCode = document.getElementById("security-code")
 const securityCodePattern = { mask: "0000" }
 const securityCodeMasked = IMask(securityCode, securityCodePattern)
 
+const theCardHolder = document.getElementById("card-holder")
+const cardHolderPattern = { mask: /\D/ }
+const theCardHolderMasked = IMask(theCardHolder, cardHolderPattern)
+
 const experationDate = document.querySelector("#expiration-date")
 const experationDatePattern = {
   mask: "MM{/}YY",
@@ -79,13 +83,15 @@ addButton.addEventListener("click", () => {
 document.querySelector("form").addEventListener("submit", event => {
   event.preventDefault()
 })
-const cardHolder = document.getElementById("card-holder")
-cardHolder.addEventListener("input", () => {
+
+theCardHolderMasked.on("accept", () => {
+  return updateCardHolder(theCardHolderMasked.value)
+})
+function updateCardHolder(card) {
   const ccHolder = document.querySelector(".cc-holder .value")
 
-  ccHolder.innerText =
-    cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
-})
+  ccHolder.innerText = card.length === 0 ? "FULANO DA SILVA" : card
+}
 
 securityCodeMasked.on("accept", () => {
   return updateSecurityCode(securityCodeMasked.value)
